@@ -1,12 +1,12 @@
 import os
-from typing import Union
+from typing import Union, List
 
 import elasticsearch
 from elasticsearch import Elasticsearch
 
 
 class Elastic:
-    def __init__(self, index: str = 'post'):
+    def __init__(self, index: str = 'posts'):
         connection_str = os.getenv("SERVER_ELASTIC_CONNECTION", None)
         self.__connection = Elasticsearch(connection_str)
         self.__index = index
@@ -25,7 +25,6 @@ class Elastic:
         if len(result) == 0:
             return None
         return result
-
 
     def delete_by_id(self, id: int) -> bool:
         """
@@ -51,5 +50,3 @@ class Elastic:
         })
         result_ids = [{"id_": item["_id"], "id": item["_source"]["id"]} for item in result["hits"]["hits"]]
         return result_ids
-
-
